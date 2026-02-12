@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHAMMA SALON - Luxury Beauty Salon</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <h1><i class="fas fa-crown"></i> SHAMMA SALON</h1>
+                    <p class="tagline">Luxury Beauty Experience</p>
+                </div>
+                
+                <ul class="nav-menu">
+                    <li><a href="#home" class="nav-link active"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#services" class="nav-link"><i class="fas fa-spa"></i> Services</a></li>
+                    <li><a href="#contact" class="nav-link"><i class="fas fa-phone"></i> Contact</a></li>
+                    <li><a href="feedback.html" class="nav-link"><i class="fas fa-comments"></i> Feedback</a></li>
+                    <li><a href="admin.html" class="nav-link admin-link"><i class="fas fa-chart-line"></i> Admin</a></li>
+                </ul>
+                
+                <div class="hamburger" id="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-overlay">
+            <div class="container">
+                <div class="hero-content">
+                    <h1 class="hero-title">Ready for Your Transformation?</h1>
+                    <p class="hero-subtitle">Experience luxury beauty treatments with our expert stylists</p>
+                    <div class="hero-buttons">
+                        <a href="#services" class="btn btn-primary">
+                            <i class="fas fa-eye"></i> VIEW SERVICES
+                        </a>
+                        <button class="btn btn-secondary" onclick="scrollToBooking()">
+                            <i class="fas fa-calendar-alt"></i> BOOK NOW
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Services -->
+    <section class="section quick-services">
+        <div class="container">
+            <h2 class="section-title">Our Popular Services</h2>
+            <p class="section-subtitle">Professional beauty treatments at competitive prices</p>
+            
+            <div class="services-grid" id="services">
+                <!-- Services will be loaded by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- All Services -->
+    <section class="section all-services">
+        <div class="container">
+            <h2 class="section-title">Complete Service Menu</h2>
+            <p class="section-subtitle">Choose from our wide range of premium services</p>
+            
+            <div class="service-categories">
+                <!-- Categories will be loaded by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section contact-section" id="contact">
+        <div class="container">
+            <h2 class="section-title">Contact Us</h2>
+            <p class="section-subtitle">Get in touch for appointments and inquiries</p>
+            
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>Email Address</h3>
+                    <a href="mailto:202111205@gcet.edu.om" class="contact-link">
+                        202111205@gcet.edu.om
+                    </a>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <h3>Phone Number</h3>
+                    <a href="tel:+96891139659" class="contact-link">
+                        +968 9113 9659
+                    </a>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Working Hours</h3>
+                    <p class="contact-hours">
+                        Sun-Thu: 9:00 AM - 8:00 PM<br>
+                        Fri-Sat: 10:00 AM - 6:00 PM
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Modal -->
+    <div class="modal" id="bookingModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-calendar-check"></i> Book Appointment</h2>
+                <button class="close-modal" onclick="closeBookingModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="bookingForm">
+                    <div class="form-group">
+                        <label for="bookingService">Service:</label>
+                        <input type="text" id="bookingService" class="form-control" readonly>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bookingName">Full Name *</label>
+                            <input type="text" id="bookingName" class="form-control" required placeholder="Your full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="bookingPhone">Phone Number *</label>
+                            <input type="tel" id="bookingPhone" class="form-control" required placeholder="+968 XXX XXX XXX">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bookingDate">Date *</label>
+                            <input type="date" id="bookingDate" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bookingTime">Time *</label>
+                            <select id="bookingTime" class="form-control" required>
+                                <option value="">Select time</option>
+                                <option value="09:00">09:00 AM</option>
+                                <option value="10:00">10:00 AM</option>
+                                <option value="11:00">11:00 AM</option>
+                                <option value="12:00">12:00 PM</option>
+                                <option value="13:00">01:00 PM</option>
+                                <option value="14:00">02:00 PM</option>
+                                <option value="15:00">03:00 PM</option>
+                                <option value="16:00">04:00 PM</option>
+                                <option value="17:00">05:00 PM</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bookingNotes">Special Requests (Optional)</label>
+                        <textarea id="bookingNotes" class="form-control" rows="3" placeholder="Any special requirements..."></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check-circle"></i> Confirm Booking
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="closeBookingModal()">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3><i class="fas fa-crown"></i> SHAMMA SALON</h3>
+                    <p>Premium Beauty & Wellness</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#home">Home</a>
+                    <a href="#services">Services</a>
+                    <a href="#contact">Contact</a>
+                    <a href="feedback.html">Feedback</a>
+                </div>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 SHAMMA SALON. All rights reserved.</p>
+                <p>Email: 202111205@gcet.edu.om | Phone: +968 9113 9659</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="booking.js"></script>
+    <script>
+        // Mobile Menu Toggle
+        document.getElementById('hamburger').addEventListener('click', function() {
+            this.classList.toggle('active');
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('hamburger').classList.remove('active');
+                document.querySelector('.nav-menu').classList.remove('active');
+            });
+        });
+
+        // Scroll to booking
+        function scrollToBooking() {
+            document.querySelector('#services').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Close booking modal
+        function closeBookingModal() {
+            document.getElementById('bookingModal').style.display = 'none';
+        }
+
+        // Service data
+        const services = [
+            { id: 1, name: "Hair Cutting", category: "hair", price: "OMR 10.000", duration: "30 min", icon: "cut" },
+            { id: 2, name: "Hair Styling", category: "hair", price: "OMR 8.000", duration: "45 min", icon: "brush" },
+            { id: 3, name: "Hair Coloring", category: "hair", price: "OMR 12.000", duration: "60 min", icon: "paint-brush" },
+            { id: 4, name: "Hair Treatment", category: "hair", price: "OMR 11.000", duration: "50 min", icon: "spa" },
+            { id: 5, name: "Hair Blowout", category: "hair", price: "OMR 7.000", duration: "30 min", icon: "wind" },
+            { id: 6, name: "Manicure", category: "nails", price: "OMR 6.000", duration: "40 min", icon: "hand-sparkles" },
+            { id: 7, name: "Pedicure", category: "nails", price: "OMR 7.000", duration: "50 min", icon: "foot" },
+            { id: 8, name: "Nail Polish", category: "nails", price: "OMR 3.000", duration: "20 min", icon: "palette" },
+            { id: 9, name: "Basic Makeup", category: "makeup", price: "OMR 8.000", duration: "45 min", icon: "magic" },
+            { id: 10, name: "Event Makeup", category: "makeup", price: "OMR 14.000", duration: "90 min", icon: "crown" },
+            { id: 11, name: "Facial Cleansing", category: "skincare", price: "OMR 9.000", duration: "50 min", icon: "bath" },
+            { id: 12, name: "Face Masks", category: "skincare", price: "OMR 7.000", duration: "40 min", icon: "mask" },
+            { id: 13, name: "Waxing", category: "hair-removal", price: "OMR 5.000", duration: "30 min", icon: "fire" },
+            { id: 14, name: "Sugar Wax", category: "hair-removal", price: "OMR 6.000", duration: "35 min", icon: "candy-cane" }
+        ];
+
+        const categories = {
+            "hair": { name: "Hair Services", icon: "cut", count: 5 },
+            "nails": { name: "Nail Services", icon: "hand-sparkles", count: 3 },
+            "makeup": { name: "Makeup Services", icon: "magic", count: 2 },
+            "skincare": { name: "Skincare", icon: "spa", count: 2 },
+            "hair-removal": { name: "Hair Removal", icon: "fire", count: 2 }
+        };
+
+        // Load quick services
+        function loadQuickServices() {
+            const grid = document.querySelector('.services-grid');
+            const quickServices = services.slice(0, 4);
+            
+            grid.innerHTML = quickServices.map(service => `
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-${service.icon}"></i>
+                    </div>
+                    <h3>${service.name}</h3>
+                    <div class="service-details">
+                        <span class="price">${service.price}</span>
+                        <span class="duration">${service.duration}</span>
+                    </div>
+                    <button class="btn-book" data-id="${service.id}" data-name="${service.name}">
+                        BOOK NOW
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Load all services by category
+        function loadAllServices() {
+            const container = document.querySelector('.service-categories');
+            
+            container.innerHTML = Object.entries(categories).map(([key, category]) => {
+                const categoryServices = services.filter(s => s.category === key);
+                
+                return `
+                    <div class="category-card">
+                        <div class="category-header">
+                            <h3><i class="fas fa-${category.icon}"></i> ${category.name}</h3>
+                            <span class="category-count">${category.count} services</span>
+                        </div>
+                        <div class="category-services">
+                            ${categoryServices.map(service => `
+                                <div class="service-item">
+                                    <div class="service-info">
+                                        <h4>${service.name}</h4>
+                                        <p>${service.duration} session</p>
+                                    </div>
+                                    <div class="service-meta">
+                                        <span class="price">${service.price}</span>
+                                        <button class="btn-book-small" data-id="${service.id}" data-name="${service.name}">
+                                            BOOK
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Initialize services
+        document.addEventListener('DOMContentLoaded', () => {
+            loadQuickServices();
+            loadAllServices();
+            
+            // Add event listeners to booking buttons
+            document.querySelectorAll('.btn-book, .btn-book-small').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const serviceName = this.getAttribute('data-name');
+                    openBookingModal(serviceName);
+                });
+            });
+        });
+
+        // Open booking modal
+        function openBookingModal(serviceName) {
+            document.getElementById('bookingService').value = serviceName;
+            document.getElementById('bookingModal').style.display = 'flex';
+            
+            // Set minimum date to tomorrow
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            document.getElementById('bookingDate').min = tomorrow.toISOString().split('T')[0];
+            document.getElementById('bookingDate').value = tomorrow.toISOString().split('T')[0];
+            
+            // Focus on name field
+            setTimeout(() => {
+                document.getElementById('bookingName').focus();
+            }, 300);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('bookingModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeBookingModal();
+            }
+        });
+
+        // Close with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('bookingModal').style.display === 'flex') {
+                closeBookingModal();
+            }
+        });
+    </script>
+</body>
+</html>
