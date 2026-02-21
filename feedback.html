@@ -311,6 +311,24 @@
         .personality-polite { background: linear-gradient(135deg, #a8e6cf, #6ab04c); color: #1d4a3e; }
         .personality-analytical { background: linear-gradient(135deg, #b2bec3, #636e72); color: #2d3436; }
         
+        /* تحديث الرسم البياني - إضافة جديدة */
+        .chart-container-chart {
+            position: relative;
+            height: 300px;
+            width: 100%;
+            margin: 15px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        
+        #trendChart {
+            max-height: 280px !important;
+            min-height: 250px !important;
+            width: 100% !important;
+        }
+        
         @media (max-width: 768px) {
             .tabs {
                 flex-wrap: wrap;
@@ -324,6 +342,10 @@
             }
             .ai-grid {
                 grid-template-columns: 1fr;
+            }
+            .chart-container-chart {
+                height: 250px;
+                padding: 5px;
             }
         }
     </style>
@@ -519,10 +541,12 @@
                         </div>
                     </div>
                     
-                    <!-- Trend Prediction Card -->
+                    <!-- Trend Prediction Card - معدل -->
                     <div class="ai-card">
                         <h3><i class="fas fa-chart-line"></i> Trend Prediction</h3>
-                        <canvas id="trendChart" style="height: 150px; width: 100%;"></canvas>
+                        <div class="chart-container-chart">
+                            <canvas id="trendChart"></canvas>
+                        </div>
                     </div>
                     
                     <!-- Smart Recommendations Card -->
@@ -1319,15 +1343,25 @@
             updateTrendChart(analyzedData);
         }
 
-        // تحديث الرسم البياني للاتجاهات
+        // تحديث الرسم البياني للاتجاهات - نسخة محسنة
         function updateTrendChart(data) {
-            const ctx = document.getElementById('trendChart');
-            if (!ctx) return;
+            const canvas = document.getElementById('trendChart');
+            if (!canvas) {
+                console.log('⚠️ Canvas not found');
+                return;
+            }
+            
+            if (!data || data.length === 0) {
+                console.log('⚠️ No data for chart');
+                return;
+            }
+            
+            console.log('📊 Updating chart with', data.length, 'items');
             
             // تجميع البيانات حسب التاريخ
             const groupedData = {};
             data.forEach(f => {
-                const date = f.date;
+                const date = f.date || new Date().toISOString().split('T')[0];
                 if (!groupedData[date]) {
                     groupedData[date] = { positive: 0, negative: 0, neutral: 0 };
                 }
@@ -1337,36 +1371,73 @@
                 else groupedData[date].neutral++;
             });
             
+            // ترتيب التواريخ
             const dates = Object.keys(groupedData).sort().slice(-7);
             const positiveData = dates.map(date => groupedData[date]?.positive || 0);
             const negativeData = dates.map(date => groupedData[date]?.negative || 0);
+            const neutralData = dates.map(date => groupedData[date]?.neutral || 0);
             
-            // تدمير الرسم البياني القديم إذا موجود
+            console.log('Chart data:', { dates, positiveData, negativeData, neutralData });
+            
+            // حساب أقصى قيمة للمقياس
+            const maxValue = Math.max(
+                Math.max(...positiveData, 0),
+                Math.max(...negativeData, 0),
+                Math.max(...neutralData, 0)
+            );
+            
+            // ضبط المقياس ليكون مناسباً
+            let yMax = maxValue + 1;
+            if (yMax < 5) yMax = 5; // حد أدنى للمقياس
+            
+            console.log('Chart max value:', maxValue, 'yMax:', yMax);
+            
+            // تدمير الرسم القديم
             if (window.trendChartInstance) {
                 window.trendChartInstance.destroy();
             }
             
-            // إنشاء رسم بياني جديد
-            window.trendChartInstance = new Chart(ctx.getContext('2d'), {
+            // إنشاء رسم جديد
+            window.trendChartInstance = new Chart(canvas.getContext('2d'), {
                 type: 'line',
                 data: {
                     labels: dates,
                     datasets: [
                         {
-                            label: 'Positive',
+                            label: 'إيجابي',
                             data: positiveData,
                             borderColor: '#27ae60',
                             backgroundColor: 'rgba(39, 174, 96, 0.1)',
+                            borderWidth: 2,
                             fill: true,
-                            tension: 0.3
+                            tension: 0.3,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            pointBackgroundColor: '#27ae60'
                         },
                         {
-                            label: 'Negative',
+                            label: 'سلبي',
                             data: negativeData,
                             borderColor: '#e74c3c',
                             backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                            borderWidth: 2,
                             fill: true,
-                            tension: 0.3
+                            tension: 0.3,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            pointBackgroundColor: '#e74c3c'
+                        },
+                        {
+                            label: 'محايد',
+                            data: neutralData,
+                            borderColor: '#f39c12',
+                            backgroundColor: 'rgba(243, 156, 18, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            pointBackgroundColor: '#f39c12'
                         }
                     ]
                 },
@@ -1376,18 +1447,74 @@
                     plugins: {
                         legend: {
                             position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                boxWidth: 10,
+                                padding: 15,
+                                font: { size: 12 }
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            titleFont: { size: 14 },
+                            bodyFont: { size: 13 },
+                            padding: 10,
+                            cornerRadius: 6
                         }
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
+                            max: yMax,
+                            title: {
+                                display: true,
+                                text: 'عدد التقييمات',
+                                font: { size: 12, weight: 'bold' },
+                                color: '#666'
+                            },
                             ticks: {
-                                stepSize: 1
+                                stepSize: 1,
+                                callback: function(value) {
+                                    return Number.isInteger(value) ? value : '';
+                                },
+                                font: { size: 11 }
+                            },
+                            grid: {
+                                color: 'rgba(0,0,0,0.05)',
+                                drawBorder: false
                             }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'التاريخ',
+                                font: { size: 12, weight: 'bold' },
+                                color: '#666'
+                            },
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 45,
+                                font: { size: 11 }
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    layout: {
+                        padding: {
+                            top: 15,
+                            bottom: 15,
+                            left: 5,
+                            right: 5
                         }
                     }
                 }
             });
+            
+            console.log('✅ Chart updated with yMax =', yMax);
         }
 
         // ===== UI Functions =====
@@ -1403,10 +1530,23 @@
             });
             
             // Show selected tab
-            document.getElementById(tabName + 'Tab').classList.add('active');
+            const selectedTab = document.getElementById(tabName + 'Tab');
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+            }
             
             // Add active class to clicked tab
-            event.target.classList.add('active');
+            if (event && event.target) {
+                event.target.classList.add('active');
+            } else {
+                // Fallback for programmatic calls
+                const tabElements = document.querySelectorAll('.tab');
+                tabElements.forEach(tab => {
+                    if (tab.textContent.toLowerCase().includes(tabName.toLowerCase())) {
+                        tab.classList.add('active');
+                    }
+                });
+            }
             
             // Update content if needed
             if (tabName === 'dashboard' || tabName === 'reports') {
